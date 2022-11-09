@@ -10,7 +10,6 @@ export default {
   methods: {
     async callback(response) {
       const userData = decodeCredential(response.credential)
-      console.log("Handle the userData", userData)
       this.userInfo = userData
     }
   }
@@ -20,8 +19,12 @@ export default {
 <template>
   <div>
     <GoogleLogin :callback="callback" prompt auto-login />
-    <div>
-      {{ userInfo}} 
-    </div>
+    <div v-if="!userInfo"></div>
+    <div v-else>
+      <img :src="userInfo.picture">
+      <div>uid : {{ userInfo.sub }}</div>
+      <div>name : {{ userInfo.name }}</div>
+      <div>email : {{ userInfo.email }}</div>
+  </div> 
   </div>
 </template>
