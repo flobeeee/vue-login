@@ -4,13 +4,13 @@ import { decodeCredential } from "vue3-google-login"
 export default {
   data() {
     return {
-      userInfo: null
+      googleUserInfo: null
     }
   },
   methods: {
     async callback(response) {
       const userData = decodeCredential(response.credential)
-      this.userInfo = userData
+      this.googleUserInfo = userData
     }
   }
 }
@@ -19,12 +19,12 @@ export default {
 <template>
   <div>
     <GoogleLogin :callback="callback" prompt auto-login />
-    <div v-if="!userInfo"></div>
+    <div v-if="!googleUserInfo"></div>
     <div v-else>
-      <img :src="userInfo.picture">
-      <div>uid : {{ userInfo.sub }}</div>
-      <div>name : {{ userInfo.name }}</div>
-      <div>email : {{ userInfo.email }}</div>
+      <img :src="googleUserInfo.picture">
+      <div>uid : {{ googleUserInfo.sub }}</div>
+      <div>name : {{ googleUserInfo.name }}</div>
+      <div>email : {{ googleUserInfo.email }}</div>
   </div> 
   </div>
 </template>
