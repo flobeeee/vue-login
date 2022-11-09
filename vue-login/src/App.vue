@@ -1,48 +1,27 @@
-<script setup lang="ts">
-import GoogleLogin from './components/GoogleLogin.vue'
-import { defineComponent } from 'vue'
+<script>
+import { decodeCredential } from "vue3-google-login"
 
-defineComponent({
-  components: {
-    GoogleLogin
-  },
+export default {
   data() {
     return {
-      google: 'google'
+      userInfo: null
     }
   },
-})
+  methods: {
+    async callback(response) {
+      const userData = decodeCredential(response.credential)
+      console.log("Handle the userData", userData)
+      this.userInfo = userData
+    }
+  }
+}
 </script>
 
 <template>
-  <GoogleLogin socialName="google"/>
+  <div>
+    <GoogleLogin :callback="callback" prompt auto-login />
+    <div>
+      {{ userInfo}} 
+    </div>
+  </div>
 </template>
-
-<style scoped>
-header {
-  line-height: 1.5;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-}
-</style>
