@@ -1,5 +1,6 @@
 <script>
 import { decodeCredential } from "vue3-google-login"
+import Facebook from './components/Facebook.vue'
 
 export default {
   data() {
@@ -12,6 +13,9 @@ export default {
       const userData = decodeCredential(response.credential)
       this.googleUserInfo = userData
     }
+  },
+  components: {
+    Facebook
   }
 }
 </script>
@@ -26,5 +30,8 @@ export default {
       <div>name : {{ googleUserInfo.name }}</div>
       <div>email : {{ googleUserInfo.email }}</div>
   </div> 
+  <div>
+    <Facebook />
+  </div>
   </div>
 </template>
