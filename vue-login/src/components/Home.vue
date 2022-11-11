@@ -1,19 +1,54 @@
+<script>
+// give each todo a unique id
+let id = 0
+
+export default {
+  data() {
+    return {
+      newTodo: '',
+      todos: [
+        { id: id++, text: 'Learn HTML' },
+        { id: id++, text: 'Learn JavaScript' },
+        { id: id++, text: 'Learn Vue' }
+      ]
+    }
+  },
+  methods: {
+    addTodo() {
+      this.todos.push({ id: id++, text: this.newTodo })
+      this.newTodo = ''
+    },
+    removeTodo(todo) {
+      this.todos = this.todos.filter(el => {
+        return el.id !== todo.id
+      })
+    }
+  }
+}
+</script>
+
 <template>
-  <div class="item">
-    <i>
-      <slot name="icon"></slot>
-    </i>
-    <div class="details">
-      <h3>
-        <slot name="heading"></slot>
-      </h3>
-      <slot></slot>
-    </div>
+  <div>
+  <ul>
+    <li v-for="todo in todos" :key="todo.id">
+      {{ todo.text }}
+      <button @click="removeTodo(todo)">X</button>
+    </li>
+  </ul>
   </div>
 </template>
 
 <style scoped>
-.item {
+#mainBox {
+  margin-top: 2rem;
+  display: flex;
+}
+#menuBox {
+  background-color: aquamarine;
+  margin-top: 2rem;
+  display: flex;
+}
+#boardBox {
   margin-top: 2rem;
   display: flex;
 }

@@ -1,37 +1,45 @@
 <script>
-import { decodeCredential } from "vue3-google-login"
+import Home from './components/Home.vue'
+import Google from './components/Google.vue'
 import Facebook from './components/Facebook.vue'
+import Board from './components/Board.vue'
+
+const routes = {
+  '/': Home,
+  '/google': Google,
+  '/facebook': Facebook,
+  '/board': Board
+}
 
 export default {
   data() {
     return {
-      googleUserInfo: null
+      currentPath: window.location.hash,
     }
   },
-  methods: {
-    async callback(response) {
-      const userData = decodeCredential(response.credential)
-      this.googleUserInfo = userData
+  computed: {
+    currentView() {
+      return routes[this.currentPath.slice(1) || '/'] || NotFound
     }
+  },
+  mounted() {
+    window.addEventListener('hashchange', () => {
+      this.currentPath = window.location.hash
+    })
   },
   components: {
-    Facebook
+    Facebook,
+    Google
   }
 }
 </script>
 
 <template>
   <div>
-    <GoogleLogin :callback="callback" prompt auto-login />
-    <div v-if="!googleUserInfo"></div>
-    <div v-else>
-      <img :src="googleUserInfo.picture">
-      <div>uid : {{ googleUserInfo.sub }}</div>
-      <div>name : {{ googleUserInfo.name }}</div>
-      <div>email : {{ googleUserInfo.email }}</div>
-  </div> 
-  <div>
-    <Facebook />
-  </div>
+      <a href="#/">Home</a> |
+      <a href="#/google">Google</a> |
+      <a href="#/facebook">Facebook</a> |
+      <a href="#/board">Board</a>
+      <component :is="currentView" />
   </div>
 </template>

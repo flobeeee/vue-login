@@ -1,5 +1,10 @@
 
 <script>
+function checkLoginState() {
+  FB.getLoginStatus(function (response) {
+    statusChangeCallback(response);
+  });
+}
 window.fbAsyncInit = function () {
   FB.init({
     appId: import.meta.env.VITE_FACEBOOK_CLIENT_ID,
