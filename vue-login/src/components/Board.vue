@@ -1,8 +1,9 @@
 <script>
+import axios from 'axios'
 export default {
   data() {
     return {
-      idx: 1,
+      metaData: null,
       boards: [
         { id: 1, name: 'lee', title: 'stella', createdAt: '2022-11-11' },
         { id: 2, name: 'kim', title: 'corona', createdAt: '2022-11-12' },
@@ -10,6 +11,12 @@ export default {
         { id: 4, name: 'bae', title: 'kgb', createdAt: '2022-11-14' }
       ]
     }
+  },
+  async mounted() {
+    const res = await axios.get(`${import.meta.env.VITE_API_URL}/notices`)
+    console.log(res)
+    this.boards = res.data.data
+    this.metaData = res.data.meta
   }
 }
 </script>
@@ -21,20 +28,26 @@ export default {
       <table class="board">
         <thead>
           <tr>
-            <th>id</th>
-            <th>관리자</th>
-            <th>프로젝트 명</th>
+            <th>idx</th>
+            <th>관리자 id</th>
+            <th>title</th>
             <th>생성일시</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="board in boards" :key="board.id">
-            <td>{{idx ++}}</td>
-            <td>{{board.name}}</td>
+            <td>{{board.id}}</td>
+            <td>{{board.managerUserId}}</td>
             <td>{{board.title}}</td>
             <td>{{board.createdAt}}</td>
           </tr>
+          <div class="pageInfo">
+            <span>Total: {{metaData ? metaData.total : 0}}</span>
+            <span>perPage: {{ metaData ? metaData.per_page: 0}}</span>
+            <span>Page: {{ metaData ? metaData.current_page : 0}}</span>
+          </div>
         </tbody>
+        <div></div>
       </table>
     </div>
   </div>
@@ -42,12 +55,13 @@ export default {
 
 <style scoped>
 .mainBox {
+  padding-top: 5%;
   display: flex;
   flex-direction: row;
-  height: 90vh;
 }.manu {
   background-color: rgb(237, 248, 206);
   flex: 1 1 auto;
+  text-align: center;
 }
 .board {
   width: 100%;
