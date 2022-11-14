@@ -72,11 +72,11 @@ export default {
             <th>생성일시</th>
           </tr>
         </thead>
-        <tbody>
-          <tr v-for="board in boards" :key="board.id">
+        <tbody >
+          <tr class="boardTitle" v-for="board in boards" :key="board.id">
             <td width="100px">{{board.id}}</td>
             <td width="100px">{{board.managerUserId}}</td>
-            <td @click="openModal(board.body)" color="blue">{{board.title}}</td>
+            <td  @click="openModal(board.body)" color="blue" style="cursor:pointer">{{board.title}}</td>
             <td width="100px">{{ board.createdAt.split('T')[0] }}</td>
           </tr>
         </tbody>
@@ -89,23 +89,8 @@ export default {
         <span> <small>(페이지 당: {{ metaData ? metaData.per_page: 0}} 건 )</small></span>
       </div>
     </div>
-    <!-- <div class="example-modal-window"> -->
-      <!-- <p>버튼을 누르면 모달 대화 상자가 열립니다.</p>
-      <button @click="openModal">열기</button> -->
-    
-      <!-- 컴포넌트 MyModal -->
-      <Modal @close="closeModal" v-if="modal">{{body}}
-        <!-- default 슬롯 콘텐츠 -->
-        <!-- <p>Vue.js Modal Window!</p> -->
-        <!-- <div><input v-model="message"></div> -->
-        <!-- /default -->
-        <!-- footer 슬롯 콘텐츠 -->
-        <!-- <template slot="footer">
-          <button @click="doSend">제출</button>
-        </template> -->
-        <!-- /footer -->
+      <Modal @close="closeModal" v-if="modal" :body=body>
       </Modal>
-    <!-- </div> -->
   </div>
 </template>
 
@@ -149,5 +134,9 @@ td:first-child {
 
 .pageInfo {
   text-align:center;
+}
+
+.boardTitle:hover{
+  background-color: pink;
 }
 </style>

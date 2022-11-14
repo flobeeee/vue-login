@@ -1,3 +1,11 @@
+<script>
+export default {
+  props: {
+    body: String
+  }
+}
+</script>
+
 <template>
   <transition name="modal" appear>
     <div class="modal modal-overlay" @click.self="$emit('close')">
@@ -7,9 +15,7 @@
             본문 내용
           </div>
         </header>
-        <div class="modal-content">
-          <slot>no body</slot>
-        </div>
+        <div v-html="body" class="modal-content"></div>
         <footer class="modal-footer">
           <slot name="footer">
             <button @click="$emit('close')">Close</button>
