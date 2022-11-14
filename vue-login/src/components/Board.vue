@@ -1,6 +1,9 @@
 <script>
 import axios from 'axios'
+import Modal from './Modal.vue'
+
 export default {
+  components: { Modal },
   data() {
     return {
       metaData: { current_page: 1, per_page: 0, last_page: 0 },
@@ -10,7 +13,9 @@ export default {
         { id: 2, managerUserId: '4', title: 'corona', createdAt: '2022-11-12' },
         { id: 3, managerUserId: '7', title: 'terra', createdAt: '2022-11-13' },
         { id: 4, managerUserId: '23', title: 'kgb', createdAt: '2022-11-14' }
-      ]
+      ],
+      modal: false,
+      body: 'body'
     }
   },
   async mounted() {
@@ -23,12 +28,31 @@ export default {
   },
   methods: {
     async getBoardData() {
-      console.log(this.currentPage)
-      console.log('hello')
       const res = await axios.get(`${import.meta.env.VITE_API_URL}/notices?page=${this.currentPage}`)
       this.boards = res.data.data
       this.metaData = res.data.meta
       this.currentPage = res.data.meta.current_page
+    },
+    showModal() {
+      show('test msg').then(c => {
+        console.log(c);
+      })
+    },
+    openModal(body) {
+      this.body = body
+      this.modal = true
+    },
+    closeModal() {
+      this.modal = false
+    },
+    doSend() {
+      if (this.message.length > 0) {
+        alert(this.message)
+        this.message = ''
+        this.closeModal()
+      } else {
+        alert('메시지를 입력해주세요.')
+      }
     }
   }
 }
@@ -52,7 +76,7 @@ export default {
           <tr v-for="board in boards" :key="board.id">
             <td width="100px">{{board.id}}</td>
             <td width="100px">{{board.managerUserId}}</td>
-            <td>{{board.title}}</td>
+            <td @click="openModal(board.body)" color="blue">{{board.title}}</td>
             <td width="100px">{{ board.createdAt.split('T')[0] }}</td>
           </tr>
         </tbody>
@@ -65,6 +89,23 @@ export default {
         <span> <small>(페이지 당: {{ metaData ? metaData.per_page: 0}} 건 )</small></span>
       </div>
     </div>
+    <!-- <div class="example-modal-window"> -->
+      <!-- <p>버튼을 누르면 모달 대화 상자가 열립니다.</p>
+      <button @click="openModal">열기</button> -->
+    
+      <!-- 컴포넌트 MyModal -->
+      <Modal @close="closeModal" v-if="modal">{{body}}
+        <!-- default 슬롯 콘텐츠 -->
+        <!-- <p>Vue.js Modal Window!</p> -->
+        <!-- <div><input v-model="message"></div> -->
+        <!-- /default -->
+        <!-- footer 슬롯 콘텐츠 -->
+        <!-- <template slot="footer">
+          <button @click="doSend">제출</button>
+        </template> -->
+        <!-- /footer -->
+      </Modal>
+    <!-- </div> -->
   </div>
 </template>
 
