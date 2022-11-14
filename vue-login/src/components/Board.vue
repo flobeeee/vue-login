@@ -3,20 +3,33 @@ import axios from 'axios'
 export default {
   data() {
     return {
-      metaData: null,
+      metaData: { current_page: 1, per_page: 0, last_page: 0 },
+      currentPage: 1,
       boards: [
-        { id: 1, name: 'lee', title: 'stella', createdAt: '2022-11-11' },
-        { id: 2, name: 'kim', title: 'corona', createdAt: '2022-11-12' },
-        { id: 3, name: 'oh', title: 'terra', createdAt: '2022-11-13' },
-        { id: 4, name: 'bae', title: 'kgb', createdAt: '2022-11-14' }
+        { id: 1, managerUserId: '5', title: 'stella', createdAt: '2022-11-11' },
+        { id: 2, managerUserId: '4', title: 'corona', createdAt: '2022-11-12' },
+        { id: 3, managerUserId: '7', title: 'terra', createdAt: '2022-11-13' },
+        { id: 4, managerUserId: '23', title: 'kgb', createdAt: '2022-11-14' }
       ]
     }
   },
   async mounted() {
-    const res = await axios.get(`${import.meta.env.VITE_API_URL}/notices`)
-    console.log(res)
-    this.boards = res.data.data
-    this.metaData = res.data.meta
+    this.getBoardData()
+  },
+  watch: {
+    currentPage() {
+      this.getBoardData()
+    }
+  },
+  methods: {
+    async getBoardData() {
+      console.log(this.currentPage)
+      console.log('hello')
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}/notices?page=${this.currentPage}`)
+      this.boards = res.data.data
+      this.metaData = res.data.meta
+      this.currentPage = res.data.meta.current_page
+    }
   }
 }
 </script>
@@ -25,6 +38,7 @@ export default {
   <div class="mainBox">
     <div class="manu">manu</div>
     <div class="boardBox">
+      <span>총 {{metaData ? metaData.total : 0}} 건</span>
       <table class="board">
         <thead>
           <tr>
@@ -36,19 +50,20 @@ export default {
         </thead>
         <tbody>
           <tr v-for="board in boards" :key="board.id">
-            <td>{{board.id}}</td>
-            <td>{{board.managerUserId}}</td>
+            <td width="100px">{{board.id}}</td>
+            <td width="100px">{{board.managerUserId}}</td>
             <td>{{board.title}}</td>
-            <td>{{board.createdAt}}</td>
+            <td width="100px">{{ board.createdAt.split('T')[0] }}</td>
           </tr>
-          <div class="pageInfo">
-            <span>Total: {{metaData ? metaData.total : 0}}</span>
-            <span>perPage: {{ metaData ? metaData.per_page: 0}}</span>
-            <span>Page: {{ metaData ? metaData.current_page : 0}}</span>
-          </div>
         </tbody>
         <div></div>
       </table>
+      <div class="pageInfo">
+        <span @click="currentPage--" style="cursor:pointer">{{ (metaData.current_page === 1) ? '' : '◀' }}</span>
+        <span>[ {{ metaData ? metaData.current_page : 0}} / {{ metaData ? metaData.last_page : 0}} ] </span>
+        <span  @click="currentPage++" style="cursor:pointer"> {{ (metaData.current_page === metaData.last_page) ? '' : '▶' }}</span>
+        <span> <small>(페이지 당: {{ metaData ? metaData.per_page: 0}} 건 )</small></span>
+      </div>
     </div>
   </div>
 </template>
@@ -89,5 +104,9 @@ td {
 th:first-child,
 td:first-child {
   border-left: none;
+}
+
+.pageInfo {
+  text-align:center;
 }
 </style>
