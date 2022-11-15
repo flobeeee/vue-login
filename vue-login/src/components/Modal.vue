@@ -50,6 +50,8 @@ export default {
 
   &-content {
     padding: 10px 20px;
+    height: 500px;
+    overflow: auto;
   }
 
   &-header {
