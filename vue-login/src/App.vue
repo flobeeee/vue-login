@@ -36,10 +36,38 @@ export default {
 
 <template>
   <div>
-      <a href="#/">Home</a> |
-      <a href="#/google">Google</a> |
-      <a href="#/facebook">Facebook</a> |
-      <a href="#/board">Board</a>
+    <a href="#/">Home</a> |
+    <a href="#/board">Board</a>
+  <div class="mainBox">
+    <div class="manu">
+      <h4>
+        *
+      </h4>
+      <a href="#/google">Google</a>
+      <a href="#/facebook">Facebook</a>
+    </div>
+    <div class="boardBox">
       <component :is="currentView" />
+  <div>
+  </div>
+  </div>
+  </div>
   </div>
 </template>
+
+<style scoped>
+.mainBox {
+  padding-top: 5%;
+  display: flex;
+  flex-direction: row;
+}.manu {
+  background-color: rgb(237, 248, 206);
+  flex: 1 1 auto;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+}
+.boardBox {
+  flex: 4 1 auto;
+}
+</style>

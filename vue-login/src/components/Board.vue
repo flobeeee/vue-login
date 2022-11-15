@@ -72,16 +72,12 @@ export default {
         alert('메시지를 입력해주세요.')
       }
     },
-    selected(value) {
-      console.log(value)
-    }
   }
 }
 </script>
 
 <template>
   <div class="mainBox">
-    <div class="manu">manu</div>
     <div class="boardBox">
       <span>총 {{metaData ? metaData.total : 0}} 건</span>
       <table class="board">
@@ -124,10 +120,6 @@ export default {
   padding-top: 5%;
   display: flex;
   flex-direction: row;
-}.manu {
-  background-color: rgb(237, 248, 206);
-  flex: 1 1 auto;
-  text-align: center;
 }
 .board {
   width: 100%;
