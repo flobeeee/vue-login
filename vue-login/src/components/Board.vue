@@ -15,7 +15,22 @@ export default {
         { id: 4, managerUserId: '23', title: 'kgb', createdAt: '2022-11-14' }
       ],
       modal: false,
-      body: 'body'
+      body: 'body',
+      perPageList: [
+        {
+          value: 5,
+          text: '5/page'
+        },
+        {
+          value: 10,
+          text: '10/page'
+        },
+        {
+          value: 15,
+          text: '15/page'
+        }
+      ],
+      perPage: 10
     }
   },
   async mounted() {
@@ -24,11 +39,14 @@ export default {
   watch: {
     currentPage() {
       this.getBoardData()
+    },
+    perPage() {
+      this.getBoardData()
     }
   },
   methods: {
     async getBoardData() {
-      const res = await axios.get(`${import.meta.env.VITE_API_URL}/notices?page=${this.currentPage}`)
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}/notices?page=${this.currentPage}&perPage=${this.perPage}`)
       this.boards = res.data.data
       this.metaData = res.data.meta
       this.currentPage = res.data.meta.current_page
@@ -53,6 +71,9 @@ export default {
       } else {
         alert('메시지를 입력해주세요.')
       }
+    },
+    selected(value) {
+      console.log(value)
     }
   }
 }
@@ -86,7 +107,11 @@ export default {
         <span @click="currentPage--" style="cursor:pointer">{{ (metaData.current_page === 1) ? '' : '◀' }}</span>
         <span>[ {{ metaData ? metaData.current_page : 0}} / {{ metaData ? metaData.last_page : 0}} ] </span>
         <span  @click="currentPage++" style="cursor:pointer"> {{ (metaData.current_page === metaData.last_page) ? '' : '▶' }}</span>
-        <span> <small>(페이지 당: {{ metaData ? metaData.per_page: 0}} 건 )</small></span>
+        <span>
+          <select v-model="perPage">
+            <option v-for="perPage in perPageList" :key="perPage.value" :value="perPage.value">{{ perPage.text }}</option>
+            </select>
+          </span>
       </div>
     </div>
       <Modal @close="closeModal" v-if="modal" :body=body>
