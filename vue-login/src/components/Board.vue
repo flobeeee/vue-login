@@ -34,7 +34,7 @@ export default {
     }
   },
   async mounted() {
-    this.getBoardData()
+    await this.getBoardData()
   },
   watch: {
     currentPage() {
